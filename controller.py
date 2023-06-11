@@ -1,6 +1,7 @@
 from app import app
 from flask import request
 from flask import abort, jsonify
+from flask import render_template
 
 from models import *
 
@@ -152,3 +153,48 @@ def load_employees():
     response['file-uploaded'] = 'hired_employees'
 
     return jsonify(response)
+
+
+@app.route("/hired_quarter", methods=['GET'])
+def hired_quarter():
+    response = set_response()
+    #get data
+    tables = queries()
+    status, df_data, err = tables.exec_querie('hired_quarter')
+    if not status:
+        response['status'] = False
+        response['error'] = True
+        response['msg'] = err
+
+    try:
+        if request.headers['Content-Type'] == 'application/json':
+            response['data'] = df_data.to_dict(orient='records')
+            return jsonify(response)
+    except:
+        pass
+    print(df_data.columns.values)
+    return render_template('hired_quarter.html',  tables=[df_data.to_html(classes='data')], 
+                           titles=df_data.columns.values, error = response['error'],msg = response['msg'])
+
+
+
+@app.route("/hired_department", methods=['GET'])
+def hired_department():
+    response = set_response()
+    #get data
+    tables = queries()
+    status, df_data, err = tables.exec_querie('hired_department')
+    if not status:
+        response['status'] = False
+        response['error'] = True
+        response['msg'] = err
+
+    try:
+        if request.headers['Content-Type'] == 'application/json':
+            response['data'] = df_data.to_dict(orient='records')
+            return jsonify(response)
+    except:
+        pass
+    print(df_data.columns.values)
+    return render_template('hired_department.html',  tables=[df_data.to_html(classes='data')], 
+                           titles=df_data.columns.values, error = response['error'],msg = response['msg'])
