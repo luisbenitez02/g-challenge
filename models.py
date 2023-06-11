@@ -1,13 +1,18 @@
 import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
+from keyvault.keys_admin import get_secrets
+import os
 
+print('Getting credentials')
+kv_name = os.environ['kv_name']
+database = get_secrets(kv_name,'database')
+username = get_secrets(kv_name,'db-username')
+password = get_secrets(kv_name,'db-pass')
+print('Credentials got')
 
-def get_conection():
+def get_conection(database,username,password):
     server = 'tcp:g-server.database.windows.net,1433;'
-    database = 'g-demo'
-    username = 'luisb'
-    password = 'Luis950.#'
     driver_str = "Driver={ODBC Driver 18 for SQL Server}"
     odbc = f"{driver_str};Server={server}Database={database};Uid={username};Pwd={password};Encrypt=yes;TrustServerCertificate=no;ConnectioTimeout=30;"
     engine=create_engine(f'mssql+pyodbc:///?odbc_connect={odbc}')
@@ -56,7 +61,7 @@ class queries():
         status = True
         err = None
         try:
-            engine = get_conection()
+            engine = get_conection(database,username,password)
             df_result = pd.read_sql(querie, engine)
         except Exception as e:
             print(e)
@@ -80,7 +85,7 @@ class assist():
 
     def upload_df(self,df_in,tbl_name,batch_size=1000,mode='replace'):
         try:
-            engine=get_conection()
+            engine=get_conection(database,username,password)
             # Insertar el DataFrame en la tabla de la base de datos
             df_in.to_sql(tbl_name, engine, if_exists=mode, index=False, chunksize=batch_size)
         except Exception as e:

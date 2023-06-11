@@ -3,3 +3,5 @@ numpy==1.24.3
 pandas==2.0.1
 SQLAlchemy==2.0.14
 pyodbc==4.0.39
+azure-keyvault==4.2.0
+azure-identity==1.13.0
