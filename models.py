@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 
 class assist():
 
-    def upload_df(df_in,tbl_name,batch_size=1000):
+    def upload_df(self,df_in,tbl_name,batch_size=1000,mode='replace'):
         try:
             server = 'tcp:g-server.database.windows.net,1433;'
             database = 'g-demo'
@@ -16,22 +16,11 @@ class assist():
             engine=create_engine(f'mssql+pyodbc:///?odbc_connect={odbc}')
 
             # Insertar el DataFrame en la tabla de la base de datos
-            df_in.to_sql(tbl_name, engine, if_exists='replace', index=False, chunksize=batch_size)
+            df_in.to_sql(tbl_name, engine, if_exists=mode, index=False, chunksize=batch_size)
         except Exception as e:
             print(f'error upload {e}')
-            return False
-        return True
-        
-    
-    def load_file(self,df_in,batch_size=1000):
-        try:
-            df = df_in.copy()
-            df = departments.clean(df)
-            response = departments.upload_df(df,batch_size=1000)
-        except Exception as e:
-            return {'uploaded':False, 'err-uploading':e}
-
-        return {'uploaded':True}
+            return False, f'error uploaded {e}'#TODO error less descriptive
+        return True, None
 
 
 class departments():
@@ -43,38 +32,20 @@ class departments():
             df['department'] = np.where(pd.isnull(df['department']),df['department'],df['department'].astype(str, errors='ignore'))
             df = df[['id','department']].copy()
         except Exception as e:
-            print(f"error clean: {e}")
-            return False
+            msg = f"error clean: {e}"
+            print(msg)
+            return None,True,msg #df, err
 
-        return df
+        return df,False,None
     
-    def upload_df(df_in,batch_size=1000):
-        try:
-            server = 'tcp:g-server.database.windows.net,1433;'
-            database = 'g-demo'
-            username = 'luisb'
-            password = 'Luis950.#'
-            driver_str = "Driver={ODBC Driver 18 for SQL Server}"
-            odbc = f"{driver_str};Server={server}Database={database};Uid={username};Pwd={password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
-            engine=create_engine(f'mssql+pyodbc:///?odbc_connect={odbc}')
-
-            # Insertar el DataFrame en la tabla de la base de datos
-            df_in.to_sql('departments', engine, if_exists='replace', index=False, chunksize=batch_size)
-        except Exception as e:
-            print(f'error upload {e}')
-            return False
-        return True
+    def execute(self,df_in,chunk):
+        df_cleaned,err = departments.clean(df_in)
+        if err==True:
+            return False,err
         
-    
-    def load_file(self,df_in,batch_size=1000):
-        try:
-            df = df_in.copy()
-            df = departments.clean(df)
-            response = departments.upload_df(df,batch_size=1000)
-        except Exception as e:
-            return {'uploaded':False, 'err-uploading':e}
-
-        return {'uploaded':True}
+        helper = assist()
+        status,err = helper.upload_df(df_cleaned,'departments',chunk)
+        return status,err
 
 
 class jobs():
@@ -86,40 +57,21 @@ class jobs():
             df['job'] = np.where(pd.isnull(df['job']),df['job'],df['job'].astype(str, errors='ignore'))
             df = df[['id','job']].copy()
         except Exception as e:
-            print(f"error clean: {e}")
-            return False
+            msg = f"error clean: {e}"
+            print(msg)
+            return None,True,msg #df, err
 
-        return df
+        return df,False,None
     
-    def upload_df(df_in,batch_size=1000):
-        try:
-            server = 'tcp:g-server.database.windows.net,1433;'
-            database = 'g-demo'
-            username = 'luisb'
-            password = 'Luis950.#'
-            driver_str = "Driver={ODBC Driver 18 for SQL Server}"
-            odbc = f"{driver_str};Server={server}Database={database};Uid={username};Pwd={password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
-            engine=create_engine(f'mssql+pyodbc:///?odbc_connect={odbc}')
-
-            # Insertar el DataFrame en la tabla de la base de datos
-            df_in.to_sql('jobs', engine, if_exists='replace', index=False, chunksize=batch_size)
-        except Exception as e:
-            print(f'error upload {e}')
-            return False
-        return True
+    def execute(self,df_in,chunk):
+        df_cleaned,err,msg = jobs.clean(df_in)
+        if err==True:
+            return False,msg
         
+        helper = assist()
+        status,err = helper.upload_df(df_cleaned,'jobs',chunk)
+        return status,None
     
-    def load_file(self,df_in,batch_size=1000):
-        try:
-            df = df_in.copy()
-            df = jobs.clean(df)
-            response = jobs.upload_df(df,batch_size=1000)
-        except Exception as e:
-            return {'uploaded':False, 'err-uploading':e}
-
-        return {'uploaded':response}
-
-
 
 class employees():
 
@@ -133,39 +85,20 @@ class employees():
             df['job_id'] = df['job_id'].astype(int,errors='ignore')
             df = df[['id','name','datetime','department_id','job_id']].copy()
         except Exception as e:
-            print(f"error clean: {e}")
-            return False
+            msg = f"error clean: {e}"
+            print(msg)
+            return None,True,msg #df, err
 
-        return df
+        return df,False,None
     
-    def upload_df(df_in,batch_size=1000):
-        try:
-            server = 'tcp:g-server.database.windows.net,1433;'
-            database = 'g-demo'
-            username = 'luisb'
-            password = 'Luis950.#'
-            driver_str = "Driver={ODBC Driver 18 for SQL Server}"
-            odbc = f"{driver_str};Server={server}Database={database};Uid={username};Pwd={password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
-            engine=create_engine(f'mssql+pyodbc:///?odbc_connect={odbc}')
-
-            # Insertar el DataFrame en la tabla de la base de datos
-            df_in.to_sql('hired_employees', engine, if_exists='replace', index=False, chunksize=batch_size)
-        except Exception as e:
-            print(f'error upload {e}')
-            return False
-        return True
+    def execute(self,df_in,chunk):
+        df_cleaned,err,msg = employees.clean(df_in)
+        if err==True:
+            return False,msg
         
-    
-    def load_file(self,df_in,batch_size=1000):
-        try:
-            df = df_in.copy()
-            df = employees.clean(df)
-            response = employees.upload_df(df,batch_size=batch_size)
-        except Exception as e:
-            return {'uploaded':False, 'err-uploading':e}
-
-        return {'uploaded':response}
-
+        helper = assist()
+        status,err = helper.upload_df(df_cleaned,'hired_employees',chunk)
+        return status,None
 
 
 
