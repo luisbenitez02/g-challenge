@@ -110,13 +110,13 @@ class departments():
         return df,False,None
     
     def execute(self,df_in,chunk):
-        df_cleaned,err = departments.clean(df_in)
+        df_cleaned,err,msg = departments.clean(df_in)
         if err==True:
-            return False,err
+            return False,msg
         
         helper = assist()
         status,err = helper.upload_df(df_cleaned,'departments',chunk)
-        return status,err
+        return status,None
 
 
 class jobs():

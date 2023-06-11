@@ -31,9 +31,10 @@ def get_params(req):
     
     try:
         dictinfo['file'] = req.files['file']
-    except:
+    except Exception as e:
         dictinfo['error'] = True
         dictinfo['msg'] = "sorry we couldn't find the parameter 'file'"
+        print(e)
 
     try:
         dictinfo['chunk'] = int(request.form['chunk'])
