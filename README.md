@@ -208,7 +208,7 @@ AVG is used to get the mean of employees hired in all departments and the condit
 
 **Example of request in Python**
 
-If you prefeer execute a request out of the web explorer, You can add _'Content-Type': 'application/json'_ to the headers and **the result returned will be a JSON file**
+If you prefeer to execute a request out of the web explorer, You can add _'Content-Type': 'application/json'_ to the headers and **the result returned will be a JSON file**
 ```python
 import requests
 import json
@@ -283,7 +283,7 @@ For this question, the following SQL query is executed:
         d.department,
         j.job;
 ```
-This query makes an inner join between the tables departments, jobs and hired_employees to get the names of department and job for the employees filtering the data by year = 2021. 
+This query makes an inner join among the tables departments, jobs and hired_employees to get the names of department and job for the employees filtering the data by year = 2021. 
 
 The clausule 'COUNT(CASE WHEN DATEPART(QUARTER, h.datetime) = 1 THEN 1 END) AS Q#':
 
@@ -296,14 +296,14 @@ Finally we have a table group by department and job.
 #### Exploring the data [GET]
 **Endpint**: https://g-demo.azurewebsites.net/hired_quarter
 
-**Use a web explorer is the best way to consult the data**
+**Using a web explorer is the best way to consult the data**
 
 ![Alt text](git_views/view_quarter.png)
 
 
 **Example of request in Python**
 
-If you prefeer execute a request out of the web explorer, You can add _'Content-Type': 'application/json'_ to the headers and **the result returned will be a JSON file**
+If you prefeer to execute a request out of the web explorer, You can add _'Content-Type': 'application/json'_ to the headers and **the result returned will be a JSON file**
 ```python
 import requests
 import json
@@ -362,21 +362,21 @@ print(response.text)
 ## Architecture of solution
 ![Alt text](git_views/g-arqui.png)
 
-The solution was created with Python (Flask) and deployed on Azure App Service using CI/CD integration with GitHub actions.
+The solution was created with Python (Flask) and deployed on Azure App Service using CI/CD deployment with GitHub actions.
 
 * SQL database is only accesible for Azure services
 * Key-vault is avalible on a public endpoint but only the applicacion registered and admin can read the secrets
 
 ### models.py
-This file contains definitions of each table, cleaning functions.
-There are functions to upload the data using pandas odbc driver. Also is include the SQL queries to consult the data uploaded.
+This file contains definitions of each table and cleaning functions.
+Also there are functions to upload the data using pandas odbc driver. Also is includeed the SQL queries to consult the data uploaded.
 
 The secrets of Key-vault is obtained here to do the connections of the database
 
 **The access level of the key-vault and SQL server is gobernated for the Azure Active Directory and Access control policies**
 
 ### controller.py
-Containing the logical for each endpoint. Manage the request and response to the user.
+It contains the logical for each endpoint. Manage the request and response to the user.
 
 ### app.py
 It's the main file of the app. Used to starting the application
