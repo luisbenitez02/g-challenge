@@ -1,11 +1,11 @@
 # Welcome to G-Challenge _by Luis Benitez_
 This is an API demo deployed as solution of “Data Engineering Coding Challenge”
 
-There are avalible three endpoints to upload .csv files and twice more to get information about hired employees
+There are avalible three endpoints to upload .csv files and two more to get information about hired employees
 
 
 ## QuickStart
-All services and architecture of solution runs on Azure Cloud.
+All services and architecture of solution run on Azure Cloud.
 
 **The service is only avalible on:** [g-demo.azurewebsites.net](g-demo.azurewebsites.net) during limited time. (16-07-2023)
 
@@ -14,7 +14,9 @@ If you need extend the time to make test, please contact with the administrator
 _Please check the endopints and methods avalible to do your own requests in the next sections._
 
 ## Uploading data
-You can upload new data **(only uploads as replace are available)** over the three different tables: departments, jobs and hired_employees
+You can upload new data **(only uploads with replacement are available)** over the three different tables: departments, jobs and hired_employees
+
+* Only **Uploads without header** in file is avalible
 
 **Structure of table ‘departments’**
 | column     | type    | description                                 |
@@ -40,9 +42,9 @@ You can upload new data **(only uploads as replace are available)** over the thr
 | department_id | INTEGER  | Id of the department which the employee was hired for |
 | job_id        | INTEGER  | If of the job wich the employee was hired for         |
 
-**Only .csv files are supported, be sure of upload csv separated  by comma and compatible with the schemas listed before.**
+**Only .csv files are supported, be sure of uploading csv separated  by comma and compatible with the schemas listed before.**
 
-### Load departments [POST]
+### Loading departments [POST]
 **Endpint**: https://g-demo.azurewebsites.net/load_departments
 
 **Example of request in Python**
@@ -83,7 +85,7 @@ print(response.text)
 }
 ```
 
-### Load jobs [POST]
+### Loading jobs [POST]
 **Endpint**: https://g-demo.azurewebsites.net/load_jobs
 
 **Example of request in Python**
@@ -124,7 +126,7 @@ print(response.text)
 }
 ```
 
-### Load hired_employees [POST]
+### Loading hired_employees [POST]
 **Endpint**: https://g-demo.azurewebsites.net/load_employees
 
 **Example of request in Python**
@@ -165,10 +167,10 @@ print(response.text)
 }
 ```
 
-## Get metrics about the data
+## Getting metrics about the data
 You can explore the data that was inserted in the previous section. There are avalible two endpoints each one execute a specific SQL server Querie.
 
-### Get hired employees by department [POST]
+### Getting hired employees by department [GET]
 > "List of ids, name and number of employees hired of each department that hired more
 employees than the mean of employees hired in 2021 for all the departments, ordered
 by the number of employees hired (descending)."
@@ -197,10 +199,10 @@ The HAVING clausule is use to filter the departments that hired more employees t
 
 AVG is used to get the mean of employees hired in all departments and the condition 'COUNT(*) > (SELECT AVG(cnt) FROM ... )' compare the total employees hired by each department with the mean of employees in all departments. Only records greater than the mean is select
 
-#### Explore the data [GET]
+#### Exploring the data [GET]
 **Endpint**: https://g-demo.azurewebsites.net/hired_department
 
-**The best way for consult the information is using a web explorer**, you only need to do click in the previous link
+**The best way for consulting the information is using a web explorer**, you only need to click in the previous link
 
 ![Alt text](git_views/image.png)
 
@@ -257,7 +259,37 @@ print(response.text)
 ```
 
 
+### Getting hired employees by quarter [GET]
+> "Number of employees hired for each job and department in 2021 divided by quarter. The
+table must be ordered alphabetically by department and job."
 
+For this question, the following SQL query is executed:
+```sql
+    SELECT d.department AS department,j.job AS job,
+        COUNT(CASE WHEN DATEPART(QUARTER, h.datetime) = 1 THEN 1 END) AS Q1,
+        COUNT(CASE WHEN DATEPART(QUARTER, h.datetime) = 2 THEN 1 END) AS Q2,
+        COUNT(CASE WHEN DATEPART(QUARTER, h.datetime) = 3 THEN 1 END) AS Q3,
+        COUNT(CASE WHEN DATEPART(QUARTER, h.datetime) = 4 THEN 1 END) AS Q4
+    FROM
+        hired_employees h
+        INNER JOIN departments d ON h.department_id = d.id
+        INNER JOIN jobs j ON h.job_id = j.id
+    WHERE
+       YEAR(h.datetime) = 2021
+    GROUP BY
+        d.department,
+        j.job
+    ORDER BY
+        d.department,
+        j.job;
+```
+This query makes an inner join between the tables departments, jobs and hired_employees to get the names of department and job for the employees filtering the data by year = 2021. 
 
+The clausule 'COUNT(CASE WHEN DATEPART(QUARTER, h.datetime) = 1 THEN 1 END) AS Q#':
+
+* DATEPART extract the number of quarter for the year
+* CASE instruction set 1 when the condition is met. 
+* COUNT sum this 
+Finally we have a table group by department and job.
 
 
