@@ -45,11 +45,11 @@ You can upload new data **(only uploads as replace are available)** over the thr
 ```python
 import requests
 
-url = "https://g-demo.azurewebsites.net/load_jobs"
+url = "https://g-demo.azurewebsites.net/load_departments"
 
 payload = {'chunk': '1000'} #Optional (INSERT chunk-size)
 files=[
-  ('file',('jobs.csv',open('yourdata/jobs.csv','rb'),'text/csv'))
+  ('file',('departments.csv',open('yourdata/departments.csv','rb'),'text/csv'))
 ]
 headers = {}
 
@@ -79,8 +79,8 @@ print(response.text)
 }
 ```
 
-### Load departments [POST]
-**Endpint**: https://g-demo.azurewebsites.net/load_departments
+### Load jobs [POST]
+**Endpint**: https://g-demo.azurewebsites.net/load_jobs
 
 **Example of request in Python**
 ```python
@@ -103,7 +103,48 @@ print(response.text)
 ```json
 {
     "error": false,
-    "file-uploaded": "departments",
+    "file-uploaded": "jobs",
+    "msg": null,
+    "status": true,
+    "uploaded": true
+}
+
+```
+
+**Failed request**
+```json
+{
+    "error": true,
+    "msg": "error <type> [description]",
+    "status": false
+}
+```
+
+### Load hired_employees [POST]
+**Endpint**: https://g-demo.azurewebsites.net/load_jobs
+
+**Example of request in Python**
+```python
+import requests
+
+url = "https://g-demo.azurewebsites.net/load_employees"
+
+payload = {'chunk': '1000'} #Optional (INSERT chunk-size)
+files=[
+  ('file',('hired_employees.csv',open('yourdata/hired_employees.csv','rb'),'text/csv'))
+]
+headers = {}
+
+response = requests.request("POST", url, headers=headers, data=payload, files=files)
+
+print(response.text)
+```
+
+**Succesfull request**
+```json
+{
+    "error": false,
+    "file-uploaded": "hired_employees",
     "msg": null,
     "status": true,
     "uploaded": true
