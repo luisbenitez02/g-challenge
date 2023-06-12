@@ -293,3 +293,6 @@ The clausule 'COUNT(CASE WHEN DATEPART(QUARTER, h.datetime) = 1 THEN 1 END) AS Q
 Finally we have a table group by department and job.
 
 
+## Architecture of solution
+
+
