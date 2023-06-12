@@ -44,7 +44,7 @@ You can upload new data **(only uploads with replacement are available)** over t
 
 **Only .csv files are supported, be sure of uploading csv separated  by comma and compatible with the schemas listed before.**
 
-### Loading departments [POST]
+### Uploading departments [POST]
 **Endpint**: https://g-demo.azurewebsites.net/load_departments
 
 **Example of request in Python**
@@ -85,7 +85,7 @@ print(response.text)
 }
 ```
 
-### Loading jobs [POST]
+### Uploading jobs [POST]
 **Endpint**: https://g-demo.azurewebsites.net/load_jobs
 
 **Example of request in Python**
@@ -126,7 +126,7 @@ print(response.text)
 }
 ```
 
-### Loading hired_employees [POST]
+### Uploading hired_employees [POST]
 **Endpint**: https://g-demo.azurewebsites.net/load_employees
 
 **Example of request in Python**
