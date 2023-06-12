@@ -293,6 +293,98 @@ The clausule 'COUNT(CASE WHEN DATEPART(QUARTER, h.datetime) = 1 THEN 1 END) AS Q
 Finally we have a table group by department and job.
 
 
+#### Exploring the data [GET]
+**Endpint**: https://g-demo.azurewebsites.net/hired_quarter
+
+**Use a web explorer is the best way to consult the data**
+
+![Alt text](git_views/view_quarter.png)
+
+
+**Example of request in Python**
+
+If you prefeer execute a request out of the web explorer, You can add _'Content-Type': 'application/json'_ to the headers and **the result returned will be a JSON file**
+```python
+import requests
+import json
+
+url = "https://g-demo.azurewebsites.net/hired_quarter"
+
+payload = {}
+headers = {
+  'Content-Type': 'application/json',
+  'charset': 'utf-8'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+**Succesfull request**
+```json
+{
+    "data": [
+         {
+            "Q1": 1,
+            "Q2": 0,
+            "Q3": 0,
+            "Q4": 0,
+            "department": "Accounting",
+            "job": "Account Representative IV"
+        },
+        {
+            "Q1": 0,
+            "Q2": 1,
+            "Q3": 0,
+            "Q4": 0,
+            "department": "Accounting",
+            "job": "Actuary"
+        },
+        ...
+     
+    ],
+    "error": false,
+    "msg": null,
+    "status": true
+}
+```
+
+**Failed request**
+```json
+{
+    "error": true,
+    "msg": "error <type> [description]",
+    "status": false
+}
+```
+
 ## Architecture of solution
+![Alt text](git_views/g-arqui.png)
+
+The solution was created with Python (Flask) and deployed on Azure App Service using CI/CD integration with GitHub actions.
+
+* SQL database is only accesible for Azure services
+* Key-vault is avalible on a public endpoint but only the applicacion registered and admin can read the secrets
+
+### models.py
+This file contains definitions of each table, cleaning functions.
+There are functions to upload the data using pandas odbc driver. Also is include the SQL queries to consult the data uploaded.
+
+The secrets of Key-vault is obtained here to do the connections of the database
+
+**The access level of the key-vault and SQL server is gobernated for the Azure Active Directory and Access control policies**
+
+### controller.py
+Containing the logical for each endpoint. Manage the request and response to the user.
+
+### app.py
+It's the main file of the app. Used to starting the application
+
+### templates (folder)
+This folder contains .HTML views for the endpoints _/hired_quarter_ and _/hired_departments_
+
+### keyvault (folder)
+Is a help file to read secrets from the key-vault
 
 
