@@ -76,11 +76,6 @@ class queries():
         return status, df_data, err
 
             
-
-
-
-
-
 class assist():
 
     def upload_df(self,df_in,tbl_name,batch_size=1000,mode='replace'):
