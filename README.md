@@ -36,4 +36,86 @@ You can upload new data **(only uploads as replace are available)** over the thr
 | department_id | INTEGER  | Id of the department which the employee was hired for |
 | job_id        | INTEGER  | If of the job wich the employee was hired for         |
 
-#### Load data
+**Only .csv files are supported, be sure of upload csv separated  by comma and compatible with the schemas listed before.**
+
+### Load departments [POST]
+**Endpint**: https://g-demo.azurewebsites.net/load_departments
+
+**Example of request in Python**
+```python
+import requests
+
+url = "https://g-demo.azurewebsites.net/load_jobs"
+
+payload = {'chunk': '1000'} #Optional (INSERT chunk-size)
+files=[
+  ('file',('jobs.csv',open('yourdata/jobs.csv','rb'),'text/csv'))
+]
+headers = {}
+
+response = requests.request("POST", url, headers=headers, data=payload, files=files)
+
+print(response.text)
+```
+
+**Succesfull request**
+```json
+{
+    "error": false,
+    "file-uploaded": "departments",
+    "msg": null,
+    "status": true,
+    "uploaded": true
+}
+
+```
+
+**Failed request**
+```json
+{
+    "error": true,
+    "msg": "error <type> [description]",
+    "status": false
+}
+```
+
+### Load departments [POST]
+**Endpint**: https://g-demo.azurewebsites.net/load_departments
+
+**Example of request in Python**
+```python
+import requests
+
+url = "https://g-demo.azurewebsites.net/load_jobs"
+
+payload = {'chunk': '1000'} #Optional (INSERT chunk-size)
+files=[
+  ('file',('jobs.csv',open('yourdata/jobs.csv','rb'),'text/csv'))
+]
+headers = {}
+
+response = requests.request("POST", url, headers=headers, data=payload, files=files)
+
+print(response.text)
+```
+
+**Succesfull request**
+```json
+{
+    "error": false,
+    "file-uploaded": "departments",
+    "msg": null,
+    "status": true,
+    "uploaded": true
+}
+
+```
+
+**Failed request**
+```json
+{
+    "error": true,
+    "msg": "error <type> [description]",
+    "status": false
+}
+```

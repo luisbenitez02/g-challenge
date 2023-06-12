@@ -111,7 +111,7 @@ class departments():
         
         helper = assist()
         status,err = helper.upload_df(df_cleaned,'departments',chunk)
-        return status,None
+        return status,err
 
 
 class jobs():
@@ -136,7 +136,7 @@ class jobs():
         
         helper = assist()
         status,err = helper.upload_df(df_cleaned,'jobs',chunk)
-        return status,None
+        return status,err
     
 
 class employees():
@@ -164,4 +164,4 @@ class employees():
         
         helper = assist()
         status,err = helper.upload_df(df_cleaned,'hired_employees',chunk)
-        return status,None
+        return status,err
