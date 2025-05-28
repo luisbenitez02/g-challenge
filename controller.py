@@ -16,7 +16,7 @@ def load_file(file):
         dictinfo['df'] = pd.read_csv(file, header=None)
     except Exception as e:
         dictinfo['error'] = True
-        dictinfo['msg'] = "sorry we couldn't load the file, Only acept .csv"
+        dictinfo['msg'] = "sorry we couldn't upload the file, Only acept .csv"
         print(e)
     return  dictinfo
 
@@ -56,7 +56,12 @@ def set_response():
     return response
 
 
-@app.route('/load_departments', methods=['POST'])
+@app.route('/', methods=['GET'])
+def index():
+    return "¡Hola! Por favor usa los endpoints para cargar datos o consultar información."
+
+
+@app.route('/upload_departments', methods=['POST'])
 def load_departments():
     response = set_response()
     get_inf = get_params(request)
@@ -89,7 +94,7 @@ def load_departments():
     return jsonify(response)
 
 
-@app.route('/load_jobs', methods=['POST'])
+@app.route('/upload_jobs', methods=['POST'])
 def load_jobs():
     response = set_response()
     get_inf = get_params(request)
@@ -122,7 +127,7 @@ def load_jobs():
     return jsonify(response)
 
 
-@app.route('/load_employees', methods=['POST'])
+@app.route('/upload_employees', methods=['POST'])
 def load_employees():
 
     response = set_response()

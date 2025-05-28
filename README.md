@@ -45,13 +45,13 @@ You can upload new data **(only uploads with replacement are available)** over t
 **Only .csv files are supported, be sure of uploading csv separated  by comma and compatible with the schemas listed before.**
 
 ### Uploading departments [POST]
-**Endpint**: https://g-demo.azurewebsites.net/load_departments
+**Endpint**: https://g-demo.azurewebsites.net/upload_departments
 
 **Example of request in Python**
 ```python
 import requests
 
-url = "https://g-demo.azurewebsites.net/load_departments"
+url = "https://g-demo.azurewebsites.net/upload_departments"
 
 payload = {'chunk': '1000'} #Optional (INSERT chunk-size)
 files=[
@@ -86,13 +86,13 @@ print(response.text)
 ```
 
 ### Uploading jobs [POST]
-**Endpint**: https://g-demo.azurewebsites.net/load_jobs
+**Endpint**: https://g-demo.azurewebsites.net/upload_jobs
 
 **Example of request in Python**
 ```python
 import requests
 
-url = "https://g-demo.azurewebsites.net/load_jobs"
+url = "https://g-demo.azurewebsites.net/upload_jobs"
 
 payload = {'chunk': '1000'} #Optional (INSERT chunk-size)
 files=[
@@ -127,13 +127,13 @@ print(response.text)
 ```
 
 ### Uploading hired_employees [POST]
-**Endpint**: https://g-demo.azurewebsites.net/load_employees
+**Endpint**: https://g-demo.azurewebsites.net/upload_employees
 
 **Example of request in Python**
 ```python
 import requests
 
-url = "https://g-demo.azurewebsites.net/load_employees"
+url = "https://g-demo.azurewebsites.net/upload_employees"
 
 payload = {'chunk': '1000'} #Optional (INSERT chunk-size)
 files=[

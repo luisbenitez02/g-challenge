@@ -5,7 +5,7 @@ from keyvault.keys_admin import get_secrets
 import os
 
 print('Getting credentials')
-kv_name = os.environ['kv_name']
+kv_name = 'gdemovault'#os.environ['kv_name']
 database = get_secrets(kv_name,'database')
 username = get_secrets(kv_name,'db-username')
 password = get_secrets(kv_name,'db-pass')
