@@ -41,7 +41,8 @@ def get_params(req):
         if dictinfo['chunk'] > 1000:
             dictinfo['chunk'] = 1000
     except Exception as e:
-        print(f"error get chunk {e}")
+        #print(f"error get chunk {e}")
+        print('Chunk value not provided or invalid, using default value of 1000')
 
     return dictinfo
 

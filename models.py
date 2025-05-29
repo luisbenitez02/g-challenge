@@ -7,14 +7,15 @@ import os
 print('Getting credentials')
 kv_name = 'gdemovault'#os.environ['kv_name']
 database = get_secrets(kv_name,'database')
+server_name = get_secrets(kv_name,'server')
 username = get_secrets(kv_name,'db-username')
 password = get_secrets(kv_name,'db-pass')
 print('Credentials got')
 
 def get_conection(database,username,password):
-    server = 'tcp:g-server.database.windows.net,1433;'
+    server = f'tcp:{server_name}.database.windows.net,1433;'
     driver_str = "Driver={ODBC Driver 18 for SQL Server}"
-    odbc = f"{driver_str};Server={server}Database={database};Uid={username};Pwd={password};Encrypt=yes;TrustServerCertificate=no;ConnectioTimeout=30;"
+    odbc = f"{driver_str};Server={server}Database={database};Uid={username};Pwd={password};Encrypt=yes;TrustServerCertificate=no;ConnectioTimeout=60;"
     engine=create_engine(f'mssql+pyodbc:///?odbc_connect={odbc}')
     return engine
 
