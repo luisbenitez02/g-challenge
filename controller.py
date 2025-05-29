@@ -1,10 +1,6 @@
 from app import app
-from flask import request
-from flask import abort, jsonify
-from flask import render_template
-
+from flask import request, abort, jsonify, render_template
 from models import *
-
 
 def load_file(file):
     dictinfo = {
@@ -59,7 +55,7 @@ def set_response():
 
 @app.route('/', methods=['GET'])
 def index():
-    return "¡Hola! Por favor usa los endpoints para cargar datos o consultar información."
+    return jsonify({'status': True, 'msg': 'Welcome to the Employee Management System API. Please use the endpoints to upload data or retrieve reports.'})
 
 
 @app.route('/upload_departments', methods=['POST'])

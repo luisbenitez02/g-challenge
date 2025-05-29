@@ -1,7 +1,6 @@
-from flask import Flask
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, abort, jsonify
 from sqlalchemy import create_engine
-from flask import abort, jsonify
+
 
 app = Flask(__name__)
 
