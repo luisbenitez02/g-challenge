@@ -5,3 +5,4 @@ SQLAlchemy==2.0.41
 pyodbc==5.2.0
 azure-keyvault==4.2.0
 azure-identity==1.23.0
+pytest==8.3.5
