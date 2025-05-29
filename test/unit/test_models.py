@@ -17,6 +17,20 @@ def test_employees_clean_valid():
     assert err is False
     assert msg is None
     assert list(df_cleaned.columns) == ['id', 'name', 'datetime', 'department_id', 'job_id']
-    assert df_cleaned['id'].tolist() == [1, 2]
-    assert df_cleaned['name'].tolist() == ['Alice', 'Bob']
-    assert pd.api.types.is_datetime64_any_dtype(df_cleaned['datetime'])
+    assert df_cleaned['id'].tolist() == [5, 7]
+    assert df_cleaned['name'].tolist() == ['Luis', 'Viviana']
+    assert pd.api.types.is_datetime64_any_dtype(df_cleaned['datetime'])#review datatype
+
+#---- check input invalid data  on employees
+def test_employees_clean_invalid_date():
+    # DataFrame con fecha inválida
+    data = {
+        0: [2],
+        1: ['Sales'],
+        2: ['invalid-date'],
+    }
+    df = pd.DataFrame(data)
+    df_cleaned, err, msg = employees.clean(df)
+    assert err is True
+    assert df_cleaned is None
+    assert "error clean" in msg
