@@ -35,9 +35,9 @@ jobs:
       - name: Login to Azure (1)
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D574E57825844483AF91C8F5E3019101 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8E08B1A9B9764A4DA61C11618302B8C9 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C25C494434F54E54B6F441DC64E0A451 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
         
       - name: Run unit tests
         run: |
@@ -78,9 +78,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D574E57825844483AF91C8F5E3019101 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8E08B1A9B9764A4DA61C11618302B8C9 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C25C494434F54E54B6F441DC64E0A451 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
