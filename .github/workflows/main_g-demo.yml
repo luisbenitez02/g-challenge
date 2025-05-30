@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v1
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
       - name: Create and start virtual environment
         run: |
@@ -30,7 +30,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
         
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+      - name: Run unit tests
+        run: |
+          source venv/bin/activate
+          pytest --maxfail=1 --disable-warnings --tb=short
       
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2
