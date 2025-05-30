@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from models import employees
+from models import employees, departments
 
 def test_employees_clean_valid():
     # Dummy dataframe with valid data
@@ -34,3 +34,17 @@ def test_employees_clean_invalid_date():
     assert err is True
     assert df_cleaned is None
     assert "error clean" in msg
+
+#----- check input invalid data on departments
+def test_departments_clean_invalid_columns():
+    # DataFrame con columnas incorrectas
+    data = {
+        0: [1, 2],
+        1: ['HR', 'Finance'],
+        2: ['Extra Column', 'Another Extra']
+    }
+    df = pd.DataFrame(data)
+    df_cleaned, err, msg = departments.clean(df)
+    assert err is True
+    assert df_cleaned is None
+    assert "DataFrame must have at most two columns" in msg

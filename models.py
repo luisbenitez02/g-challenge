@@ -94,6 +94,9 @@ class departments():
 
     def clean(df):
         try:
+            if df.shape[1] > 2:
+                msg = "DataFrame must have at most two columns for id and department"
+                return None, True, msg
             df.rename(columns={0: "id", 1: "department"}, inplace=True)
             df['id'] = df['id'].astype(int,errors='ignore')
             df['department'] = np.where(pd.isnull(df['department']),df['department'],df['department'].astype(str, errors='ignore'))

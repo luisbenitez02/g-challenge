@@ -168,7 +168,7 @@ def hired_quarter():
         response['status'] = False
         response['error'] = True
         response['msg'] = err
-
+ 
     try:
         if request.headers['Content-Type'] == 'application/json':
             response['data'] = df_data.to_dict(orient='records')
