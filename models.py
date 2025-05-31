@@ -5,11 +5,24 @@ from keyvault.keys_admin import get_secrets
 import os
 
 print('Getting credentials')
-kv_name = 'gdemovault'#os.environ['kv_name']
-database = get_secrets(kv_name,'database')
-server_name = get_secrets(kv_name,'server')
-username = get_secrets(kv_name,'db-username')
-password = get_secrets(kv_name,'db-pass')
+try:
+    env = os.environ['ENVIRONMENT_FLAG']
+except:
+    env = 'dev'
+
+if env == 'dev':
+    print('Using dev credentials')
+    database = os.environ['DB_GDEMO']
+    server_name = os.environ['SERVER_GDEMO']
+    username = os.environ['USER_GDEMO']
+    password = os.environ['PASS_GDEMO']
+else:
+    print('Using prod credentials')
+    kv_name = os.environ['KEYVAULT_GDEMO']#'gdemovault'#os.environ['kv_name']
+    database = get_secrets(kv_name,'database')
+    server_name = get_secrets(kv_name,'server')
+    username = get_secrets(kv_name,'db-username')
+    password = get_secrets(kv_name,'db-pass')
 print('Credentials got')
 
 def get_conection(database,username,password):
