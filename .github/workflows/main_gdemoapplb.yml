@@ -34,11 +34,12 @@ jobs:
         
       - name: Run unit tests
         env:
-          DB_GDEMO: ${{ vars.DB_GDEMO }}
           ENVIRONMENT_FLAG: ${{ vars.ENVIRONMENT_FLAG }}
-          PASS_GDEMO: ${{ secrets.PASS_GDEMO }}
-          USER_GDEMO: ${{ secrets.USER_GDEMO }}
-          SERVER_GDEMO: ${{ secrets.SERVER_GDEMO }}
+          DB_GDEMO: ${{ vars.DB_GDEMO }}
+          PASS_GDEMO: ${{ vars.PASS_GDEMO }}
+          USER_GDEMO: ${{ vars.USER_GDEMO }}
+          SERVER_GDEMO: ${{ vars.SERVER_GDEMO }}
+          KEYVAULT_GDEMO: ${{ vars.KEYVAULT_GDEMO }}
         run: |
           source venv/bin/activate
           pytest --maxfail=1 --disable-warnings --tb=short
