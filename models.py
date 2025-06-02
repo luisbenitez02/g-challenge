@@ -10,7 +10,7 @@ try:
 except:
     env = 'dev'
 
-if env == 'dev':
+if env != 'prod':
     print('Using dev credentials')
     database = os.environ['DB_GDEMO']
     server_name = os.environ['SERVER_GDEMO']
