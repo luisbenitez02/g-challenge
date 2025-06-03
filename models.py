@@ -18,7 +18,7 @@ if env != 'prod':
     password = os.environ['PASS_GDEMO']
 else:
     print('Using prod credentials')
-    kv_name = os.environ['KEYVAULT_GDEMO']#'gdemovault'#os.environ['kv_name']
+    kv_name = os.environ['KEYVAULT_GDEMO']#os.environ['kv_name']
     database = get_secrets(kv_name,'database')
     server_name = get_secrets(kv_name,'server')
     username = get_secrets(kv_name,'db-username')

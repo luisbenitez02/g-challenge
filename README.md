@@ -7,7 +7,7 @@ There are avalible three endpoints to upload .csv files and two more to get info
 ## QuickStart
 All services and architecture of solution run on Azure Cloud.
 
-**The service is only avalible on:** [g-demo.azurewebsites.net](g-demo.azurewebsites.net) during limited time. (16-07-2023)
+**The service is only avalible on:** [https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net](https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net) during limited time. 
 
 If you need extend the time to make test, please contact with the administrator
 
@@ -45,13 +45,13 @@ You can upload new data **(only uploads with replacement are available)** over t
 **Only .csv files are supported, be sure of uploading csv separated  by comma and compatible with the schemas listed before.**
 
 ### Uploading departments [POST]
-**Endpint**: https://g-demo.azurewebsites.net/upload_departments
+**Endpint**: https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net/upload_departments
 
 **Example of request in Python**
 ```python
 import requests
 
-url = "https://g-demo.azurewebsites.net/upload_departments"
+url = "https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net/upload_departments"
 
 payload = {'chunk': '1000'} #Optional (INSERT chunk-size)
 files=[
@@ -86,13 +86,13 @@ print(response.text)
 ```
 
 ### Uploading jobs [POST]
-**Endpint**: https://g-demo.azurewebsites.net/upload_jobs
+**Endpint**: https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net/upload_jobs
 
 **Example of request in Python**
 ```python
 import requests
 
-url = "https://g-demo.azurewebsites.net/upload_jobs"
+url = "https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net/upload_jobs"
 
 payload = {'chunk': '1000'} #Optional (INSERT chunk-size)
 files=[
@@ -127,13 +127,13 @@ print(response.text)
 ```
 
 ### Uploading hired_employees [POST]
-**Endpint**: https://g-demo.azurewebsites.net/upload_employees
+**Endpint**: https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net/upload_employees
 
 **Example of request in Python**
 ```python
 import requests
 
-url = "https://g-demo.azurewebsites.net/upload_employees"
+url = "https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net/upload_employees"
 
 payload = {'chunk': '1000'} #Optional (INSERT chunk-size)
 files=[
@@ -200,7 +200,7 @@ The HAVING clausule is use to filter the departments that hired more employees t
 AVG is used to get the mean of employees hired in all departments and the condition 'COUNT(*) > (SELECT AVG(cnt) FROM ... )' compare the total employees hired by each department with the mean of employees in all departments. Only records greater than the mean is select
 
 #### Exploring the data [GET]
-**Endpint**: https://g-demo.azurewebsites.net/hired_department
+**Endpint**: https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net/hired_department
 
 **The best way for consulting the information is using a web explorer**, you only need to click in the previous link
 
@@ -213,7 +213,7 @@ If you prefeer to execute a request out of the web explorer, You can add _'Conte
 import requests
 import json
 
-url = "https://g-demo.azurewebsites.net/hired_department"
+url = "https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net/hired_department"
 
 payload = {}
 headers = {
@@ -294,7 +294,7 @@ Finally we have a table group by department and job.
 
 
 #### Exploring the data [GET]
-**Endpint**: https://g-demo.azurewebsites.net/hired_quarter
+**Endpint**: https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net/hired_quarter
 
 **Using a web explorer is the best way to consult the data**
 
@@ -308,7 +308,7 @@ If you prefeer to execute a request out of the web explorer, You can add _'Conte
 import requests
 import json
 
-url = "https://g-demo.azurewebsites.net/hired_quarter"
+url = "https://gdemoapplb-abcgf9fzadc3ehbx.eastus2-01.azurewebsites.net/hired_quarter"
 
 payload = {}
 headers = {
@@ -387,4 +387,7 @@ This folder contains .HTML views for the endpoints _/hired_quarter_ and _/hired_
 ### keyvault (folder)
 Is a help file to read secrets from the key-vault
 
+## Unit test (pytest)
 
+
+## Deploy CI/CD with GitHub actions
