@@ -387,7 +387,120 @@ This folder contains .HTML views for the endpoints _/hired_quarter_ and _/hired_
 ### keyvault (folder)
 Is a help file to read secrets from the key-vault
 
+
 ## Unit test (pytest)
+The unit tests include six different cases: three focused on functional testing and three specifically designed to validate functions related to data models.
 
 
-## Deploy CI/CD with GitHub actions
+## Deploy CI/CD with Docker container (step by step using Az Pipelines)
+_This content was created using multiple sources of information, including the documentation of Azure services and my own experience deploying Docker images in cloud environments such as GCP and Azure_
+
+### Step 1 Create the docker file
+Develop the Docker file. This file contains the requirements, libraries, paths, base system, and programming language to be used in our application environment. Some cloud services, like Dataflow, offer base templates for Docker files. Additionally, we can find examples of Docker files for each specific service or framework environment. A Docker file looks like this:
+
+```python
+# Imagen base oficial de Python (azure app service custom container)
+#https://learn.microsoft.com/en-us/azure/app-service/tutorial-custom-container?tabs=azure-cli&pivots=container-linux
+#https://learn.microsoft.com/es-es/azure/devops/pipelines/apps/cd/deploy-docker-webapp?view=azure-devops&tabs=java%2Cyaml
+FROM python:3.13-slim
+
+# Install system packages by pyodbc and SQL Server
+RUN apt-get update && \
+    apt-get install -y gcc g++ unixodbc-dev curl gnupg && \
+    curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    apt-get update && \
+    ACCEPT_EULA=Y apt-get install -y msodbcsql18 && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /
+
+COPY requirements.txt .
+
+# install python libs
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# copy app code
+COPY . .
+
+# port app
+EXPOSE 5000
+
+# env varaible 
+ENV ENVIRONMENT_FLAG=prod
+
+# execution app
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+
+```
+
+### Step 2: Crate the .yml file 
+_Before proceeding with this step, it is necessary to configure a service principal in Azure DevOps with sufficient permissions over the resource group (RG) where the solution will be deployed. The repository can exist in Git (Azure DevOps) or in external services like GitHub._
+
+The .yml file is a sequential configuration file used for deploying applications and services. It is structured similarly to this:
+
+```python
+trigger:
+- main
+   
+pool:
+  vmImage: 'ubuntu-latest'
+   
+
+variables:
+  imageName: 'pipelines-javascript-docker'
+  DOCKER_BUILDKIT: 1
+    
+steps:
+- task: Docker@2
+  displayName: Build an image
+  inputs:
+    repository: $(imageName)
+    command: build
+    Dockerfile: app/Dockerfile
+```
+
+
+### Step 3:  Save the built image on Az Container Registry
+Now that we have a built Docker image, we need to store it for use in our final service destination. To store the Docker image in Azure, we can use Azure Container Registry. This step can be integrated into our deployment pipeline by updating the .yml file and configuring the Docker@2 step.
+
+```python 
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+```
+
+### Step 4 Deploy in Azure App service
+Finally, we need to add an additional step to deploy our Docker image in the App Service. In Azure Pipelines, this can be done by configuring the AzureWebAppContainer@1 step in the .yml file.
+
+```python
+## Add the below snippet at the end of your pipeline
+    - task: AzureWebAppContainer@1
+      displayName: 'Azure Web App on Container Deploy'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        appName: $(appName)
+        containers: $(containerRegistry)/$(imageRepository):$(tag)
+```
+And that is all!
+
+#### References.
+https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/containers/build-image?view=azure-devops
+
+https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/containers/push-image?view=azure-devops&tabs=yaml&pivots=acr-registry
+
+https://learn.microsoft.com/en-us/azure/devops/pipelines/apps/cd/deploy-docker-webapp?view=azure-devops&tabs=java%2Cyaml
